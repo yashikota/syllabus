@@ -12,7 +12,7 @@ jobs:
   job:
     name: scraping
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: ./scraping
