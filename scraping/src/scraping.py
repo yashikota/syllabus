@@ -66,12 +66,12 @@ class Scraping:
         self.result.update(Parser(element).parse_syllabus())
 
     def run(self):
-        with tqdm(range(self.sessions["max_page"])) as pbar:
-            for i in pbar:
-                pbar.set_description(f"{self.year}-{self.lang}")
-                pbar.postfix = f"max page {self.sessions['max_page']}"
-                self.__paginate(i // 100)
-                self.__fetch_syllabus(i)
-                self.__parse()
+        for i in tqdm(
+            range(self.sessions["max_page"]),
+            desc=f"{self.year}-{self.lang}",
+        ):
+            self.__paginate(i // 100)
+            self.__fetch_syllabus(i)
+            self.__parse()
 
         output_json(self.result, f"data/{self.year}-{self.lang}.json")
