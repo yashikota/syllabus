@@ -1,0 +1,12 @@
+services:
+  syllabus:
+    build: .
+    working_dir: /app
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+    environment:
+      - TZ=Asia/Tokyo
+      - YEAR=${YEAR}
+    command: uv run src/main.py --year ${YEAR}

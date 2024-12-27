@@ -1,0 +1,6 @@
+.venv/
+.gitignore
+.dockerignore
+*.html
+*.txt
+*.md
