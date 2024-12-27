@@ -63,7 +63,7 @@ class Scraping:
         text = normalize(self.response.text)
         soup = BeautifulSoup(text, "html.parser")
         element = soup.find(id="pkx02301:ch:table")
-        self.result.update(Parser(element).parse_syllabus())
+        self.result.update(Parser().run(element))
 
     def run(self):
         for i in tqdm(

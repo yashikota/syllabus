@@ -2,8 +2,8 @@ from util import resolve_lut
 
 
 class Parser:
-    def __init__(self, element):
-        self.element = element
+    def __init__(self):
+        self.current_section = None
         self.result = {
             "basic_course_information": {},
             "registration_category": {},
@@ -14,10 +14,9 @@ class Parser:
             "references": None,
             "schedule": [],
         }
-        self.current_section = None
 
-    def parse_syllabus(self):
-        rows = self.element.find_all("div", class_="rowStyle rowMargin")
+    def run(self, element):
+        rows = element.find_all("div", class_="rowStyle rowMargin")
         for row in rows:
             section_type = self.__get_section_type(row)
             if section_type:
@@ -42,7 +41,7 @@ class Parser:
                 self.__parse_schedule_section(row)
 
         class_code = self.result["basic_course_information"].get("class_code")
-        return {class_code: self.result} if class_code else self.result
+        return {class_code: self.result}
 
     def __get_section_type(self, row):
         header = row.find("div", class_="ui-widget-header")
@@ -69,9 +68,7 @@ class Parser:
         """Process a single key-value pair and add it to results"""
         key = key_div.text.strip()
         value = self.__extract_text_from_content(value_div)
-        lut_key = resolve_lut(key)
-        if lut_key:  # Only add if we have a valid key mapping
-            self.result["basic_course_information"][lut_key] = value
+        self.result["basic_course_information"][resolve_lut(key)] = value
 
     def __parse_basic_section(self, row):
         """Parse a row in the basic section of the syllabus"""
@@ -112,8 +109,6 @@ class Parser:
             self.result[rc][resolve_lut(row_header)] = content
 
     def __parse_common_section(self, row, section):
-        if section == "references":
-            print(row)
         cols = row.find_all("div", class_=["ui-widget-header", "ui-widget-content"])
         if len(cols) < 2:
             return
