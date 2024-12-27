@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       year:
-        description: 'Year'
+        description: "Year"
         required: true
         type: number
 
@@ -12,7 +12,7 @@ jobs:
   job:
     name: scraping
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: ./scraping
@@ -29,20 +29,15 @@ jobs:
         id: set-year
         run: echo "YEAR=${{ github.event.inputs.year }}" >> $GITHUB_ENV
 
-      - name: Set current date
-        env:
-          TZ: "Asia/Tokyo"
-        run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-
       - name: Run
         run: YEAR=${{ env.YEAR }} docker compose up --build
 
       - name: Create Release and Upload Assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TAG: scraping-${{ env.CURRENT_DATE }}
-          SYLLABUS_JA: data/${{ env.YEAR }}-ja.json
-          SYLLABUS_EN: data/${{ env.YEAR }}-en.json
+          RELEASE_TAG: scraping-${{ env.YEAR }}
+          SYLLABUS_JA: scraping/data/${{ env.YEAR }}-ja.json
+          SYLLABUS_EN: scraping/data/${{ env.YEAR }}-en.json
         uses: softprops/action-gh-release@v2
         with:
           files: |
