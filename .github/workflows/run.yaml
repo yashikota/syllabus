@@ -1,0 +1,51 @@
+name: "scraping"
+
+on:
+  workflow_dispatch:
+    inputs:
+      year:
+        description: 'Year'
+        required: true
+        type: number
+
+jobs:
+  job:
+    name: scraping
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set year
+        id: set-year
+        run: echo "YEAR=${{ github.event.inputs.year }}" >> $GITHUB_ENV
+
+      - name: Set current date
+        env:
+          TZ: "Asia/Tokyo"
+        run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Run
+        run: YEAR=${{ env.YEAR }} docker compose up --build
+
+      - name: Create Release and Upload Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: scraping-${{ env.CURRENT_DATE }}
+          SYLLABUS_JA: data/${{ env.YEAR }}-ja.json
+          SYLLABUS_EN: data/${{ env.YEAR }}-en.json
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ env.SYLLABUS_JA }}
+            ${{ env.SYLLABUS_EN }}
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: ${{ env.RELEASE_TAG }}
+          draft: false
+          prerelease: false
