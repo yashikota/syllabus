@@ -1,3 +1,4 @@
+import { Copy } from "lucide-react";
 import { useLoaderData, useLocation } from "react-router";
 import type { Courses } from "~/types/syllabus";
 import type { Route } from "./+types/syllabus";
@@ -6,6 +7,14 @@ import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Toaster } from "~/components/ui/sonner";
+
+export function meta(_args: Route.MetaArgs) {
+  const params = _args.params as Route.LoaderArgs["params"];
+  return [
+    { title: `${params.syllabusID} | NAIST Syllabus App` },
+    { name: "description", content: "NAIST Syllabus App" },
+  ];
+}
 
 export async function loader() {
   try {
@@ -21,6 +30,16 @@ export async function loader() {
   }
 }
 
+async function copyURL(url: string) {
+  try {
+    await navigator.clipboard.writeText(url);
+    toast("URLをコピーしました");
+  } catch (e) {
+    console.error("Failed to copy URL", e);
+    toast("URLのコピーに失敗しました");
+  }
+}
+
 export default function Syllabus({ params }: Route.LoaderArgs) {
   const syllabuses = useLoaderData() as Courses;
   if (!syllabuses || Object.keys(syllabuses).length === 0) {
@@ -31,22 +50,25 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
 
   return (
     <>
-      <div className="flex justify-end p-4">
+      {/*
+       <div className="flex justify-end p-4">
         <Button
           className="bg-emerald-500 hover:bg-emerald-700"
           onClick={() => {
-            navigator.clipboard.writeText(
-              window.location.origin + location.pathname,
-            );
-            toast("URLをコピーしました");
+            copyURL(window.location.origin + location.pathname);
           }}
         >
+          <Copy />
           URLをコピー
         </Button>
         <Toaster />
       </div>
+      */}
 
       <main className="mx-auto w-full max-w-screen-lg pb-4 px-4">
+        <h1 className="text-2xl font-bold m-4">
+          {syllabus.basic_course_information.class_name}
+        </h1>
         <Card className="mb-4">
           <CardHeader>
             <CardTitle>授業科目基本情報</CardTitle>
@@ -122,15 +144,19 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap pb-2">
+              <div className="w-1/6">
+                <div className="py-2 mt-10">履修区分</div>
+                <div className="py-2">コア科目</div>
+              </div>
               {Object.entries(syllabus.registration_category).map(
                 ([key, value]) =>
                   key !== "registration_requirements" && (
-                    <div key={key} className="w-1/5">
+                    <div key={key} className="w-1/6">
                       <h3 className="text-lg font-bold py-2">
                         {key.toUpperCase()}
                       </h3>
-                      <div>履修区分: {value.registration_class}</div>
-                      <div>コア科目: {value.core_subjects}</div>
+                      <div className="py-2">{value.registration_class}</div>
+                      <div className="py-2">{value.core_subjects}</div>
                     </div>
                   ),
               )}
@@ -270,16 +296,21 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
           <CardContent>
             {syllabus.schedule.map((item, _) => (
               <div key={item.number} className="py-2 border-b">
-                <div className="flex justify-between">
-                  <div className="font-bold">{item.number}</div>
-                  <div>{item.datetime}</div>
+                <div className="flex flex-col md:flex-row items-start gap-2">
+                  <div className="md:w-6 font-bold flex-shrink-0 flex items-center space-x-2">
+                    <span>{item.number}</span>
+                    <span className="md:hidden">{item.theme}</span>
+                  </div>
+                  <div className="flex-1 flex flex-col ml-4">
+                    <div className="font-bold hidden md:block">
+                      {item.theme}
+                    </div>
+                    <div>{item.datetime}</div>
+                    <div>{item.room}</div>
+                    <div>{item.lecturer}</div>
+                  </div>
+                  <div className="ml-4 md:w-3/5">{item.content}</div>
                 </div>
-                <div className="flex justify-between">
-                  <div>{item.room}</div>
-                  <div>{item.lecturer}</div>
-                </div>
-                <div className="font-bold">{item.theme}</div>
-                <div>{item.content}</div>
               </div>
             ))}
           </CardContent>
