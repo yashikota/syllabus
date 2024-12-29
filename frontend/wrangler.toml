@@ -4,8 +4,3 @@ pages_build_output_dir = "./build/client"
 
 [observability]
 enabled = true
-head_sampling_rate = 1
-
-[observability.logs]
-enabled = true
-invocation_logs = true
