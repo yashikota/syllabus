@@ -9,10 +9,10 @@ export default defineConfig(({ isSsrBuild }) => ({
   build: {
     rollupOptions: isSsrBuild
       ? {
-        input: {
-          "index.js": "virtual:react-router/server-build",
-        },
-      }
+          input: {
+            "index.js": "virtual:react-router/server-build",
+          },
+        }
       : undefined,
   },
   css: {
@@ -50,10 +50,10 @@ export default defineConfig(({ isSsrBuild }) => ({
         build: {
           rollupOptions: isSsrBuild
             ? {
-              output: {
-                entryFileNames: "[name]",
-              },
-            }
+                output: {
+                  entryFileNames: "[name]",
+                },
+              }
             : undefined,
         },
       }),
