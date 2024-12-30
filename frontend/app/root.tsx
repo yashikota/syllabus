@@ -10,6 +10,7 @@ import {
 // import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 import type { Route } from "./+types/root";
 import stylesheet from "./app.css?url";
+import Footer from "./components/design/footer";
 import Header from "./components/design/header";
 
 export const links: Route.LinksFunction = () => [
@@ -41,6 +42,7 @@ export default function App() {
       {/* <NuqsAdapter> */}
       <Outlet />
       {/* </NuqsAdapter> */}
+      <Footer />
     </>
   );
 }
