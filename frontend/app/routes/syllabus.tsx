@@ -71,11 +71,11 @@ function linkify(text: string | string[] | null) {
     return null;
   }
   const textContent = Array.isArray(text) ? text.join("\n") : text;
-  //   const processedText = textContent.replace(/\\n/g, "\n");
+  const processedText = textContent.replace(/\\n/g, "\n");
 
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const urlRegex = /(https?:\/\/[^\s)]+)/g;
 
-  const processText = textContent.split(urlRegex).map((part, _) => {
+  const processText = processedText.split(urlRegex).map((part, _) => {
     if (part.match(urlRegex)) {
       return (
         <Link
@@ -118,7 +118,7 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
       </div>
       */}
 
-      <main className="mx-auto w-full max-w-screen-lg pb-4 px-4">
+      <main className="mx-auto w-full max-w-screen-lg pb-4 px-4 whitespace-pre-wrap">
         <h1 className="text-2xl font-bold m-4">
           {syllabus.basic_course_information.class_name}
         </h1>
