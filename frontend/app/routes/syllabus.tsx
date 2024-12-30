@@ -1,20 +1,67 @@
-import { Copy } from "lucide-react";
-import { useLoaderData, useLocation } from "react-router";
+import { Link, useLoaderData, useLocation } from "react-router";
 import type { Courses } from "~/types/syllabus";
 import type { Route } from "./+types/syllabus";
 
+import type { MetaFunction } from "react-router";
 import { toast } from "sonner";
-import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { Toaster } from "~/components/ui/sonner";
 
-export function meta(_args: Route.MetaArgs) {
-  const params = _args.params as Route.LoaderArgs["params"];
+const origin = "https://syllabus.naist.yashikota.com";
+
+export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
+  const syllabusParams = params as Route.LoaderArgs["params"];
+  const location = useLocation();
+
   return [
-    { title: `${params.syllabusID} | NAIST Syllabus App` },
-    { name: "description", content: "NAIST Syllabus App" },
+    {
+      title: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
+    },
+    {
+      name: "description",
+      content: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
+    },
+    {
+      name: "og:title",
+      content: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
+    },
+    {
+      name: "og:description",
+      content: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
+    },
+    {
+      name: "og:site_name",
+      content: "NAIST Syllabus App",
+    },
+    {
+      name: "og:url",
+      content: `${origin}${location.pathname}`,
+    },
+    {
+      name: "og:image",
+      content: "https://syllabus.naist.yashikota.com/logo.png",
+    },
+    {
+      name: "twitter:title",
+      content: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
+    },
+    {
+      name: "twitter:description",
+      content: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
+    },
+    {
+      name: "twitter:url",
+      content: `${origin}${location.pathname}`,
+    },
+    {
+      name: "twitter:image",
+      content: "https://syllabus.naist.yashikota.com/logo.png",
+    },
+    {
+      name: "twitter:card",
+      content: "summary",
+    },
   ];
-}
+};
 
 export async function loader() {
   try {
@@ -30,14 +77,41 @@ export async function loader() {
   }
 }
 
-async function copyURL(url: string) {
-  try {
-    await navigator.clipboard.writeText(url);
-    toast("URLをコピーしました");
-  } catch (e) {
-    console.error("Failed to copy URL", e);
-    toast("URLのコピーに失敗しました");
+// async function copyURL(url: string) {
+//   try {
+//     await navigator.clipboard.writeText(url);
+//     toast("URLをコピーしました");
+//   } catch (e) {
+//     console.error("Failed to copy URL", e);
+//     toast("URLのコピーに失敗しました");
+//   }
+// }
+
+function linkify(text: string | string[] | null) {
+  if (!text) {
+    return null;
   }
+  const textContent = Array.isArray(text) ? text.join("\n") : text;
+  //   const processedText = textContent.replace(/\\n/g, "\n");
+
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+  const processText = textContent.split(urlRegex).map((part, _) => {
+    if (part.match(urlRegex)) {
+      return (
+        <Link
+          to={part}
+          className="text-blue-500 underline"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {part}
+        </Link>
+      );
+    }
+    return part;
+  });
+  return processText;
 }
 
 export default function Syllabus({ params }: Route.LoaderArgs) {
@@ -55,7 +129,7 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
         <Button
           className="bg-emerald-500 hover:bg-emerald-700"
           onClick={() => {
-            copyURL(window.location.origin + location.pathname);
+            copyURL(`${origin}${location.pathname}`);
           }}
         >
           <Copy />
@@ -162,7 +236,9 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
               )}
             </div>
             <div className="py-2 border-t">
-              {syllabus.registration_category.registration_requirements}
+              {linkify(
+                syllabus.registration_category.registration_requirements,
+              )}
             </div>
           </CardContent>
         </Card>
@@ -197,7 +273,7 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
                 }`}
               >
                 <span className="w-1/3 font-right">{item.label}</span>
-                <span className="w-2/3">{item.value}</span>
+                <span className="w-2/3">{linkify(item.value)}</span>
               </div>
             ))}
           </CardContent>
@@ -225,7 +301,7 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
                 }`}
               >
                 <span className="w-1/3 font-right">{item.label}</span>
-                <span className="w-2/3">{item.value}</span>
+                <span className="w-2/3">{linkify(item.value)}</span>
               </div>
             ))}
           </CardContent>
@@ -269,7 +345,7 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
                 }`}
               >
                 <span className="w-1/3 font-right">{item.label}</span>
-                <span className="w-2/3">{item.value}</span>
+                <span className="w-2/3">{linkify(item.value)}</span>
               </div>
             ))}
           </CardContent>
@@ -279,14 +355,14 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
           <CardHeader>
             <CardTitle>授業関連URL</CardTitle>
           </CardHeader>
-          <CardContent>{syllabus.url}</CardContent>
+          <CardContent>{linkify(syllabus.url)}</CardContent>
         </Card>
 
         <Card className="mb-4">
           <CardHeader>
             <CardTitle>その他参考資料等</CardTitle>
           </CardHeader>
-          <CardContent>{syllabus.references}</CardContent>
+          <CardContent>{linkify(syllabus.references)}</CardContent>
         </Card>
 
         <Card className="mb-4">
@@ -297,19 +373,22 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
             {syllabus.schedule.map((item, _) => (
               <div key={item.number} className="py-2 border-b">
                 <div className="flex flex-col md:flex-row items-start gap-2">
+                  {/* for mobile layout */}
                   <div className="md:w-6 font-bold flex-shrink-0 flex items-center space-x-2">
                     <span>{item.number}</span>
-                    <span className="md:hidden">{item.theme}</span>
+                    <span className="md:hidden">{linkify(item.theme)}</span>
                   </div>
+
+                  {/* for desktop layout */}
                   <div className="flex-1 flex flex-col ml-4">
                     <div className="font-bold hidden md:block">
-                      {item.theme}
+                      {linkify(item.theme)}
                     </div>
-                    <div>{item.datetime}</div>
-                    <div>{item.room}</div>
-                    <div>{item.lecturer}</div>
+                    <div>{linkify(item.datetime)}</div>
+                    <div>{linkify(item.room)}</div>
+                    <div>{linkify(item.lecturer)}</div>
                   </div>
-                  <div className="ml-4 md:w-3/5">{item.content}</div>
+                  <div className="ml-4 md:w-3/5">{linkify(item.content)}</div>
                 </div>
               </div>
             ))}
