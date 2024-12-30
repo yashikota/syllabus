@@ -3,10 +3,9 @@ import type { Courses } from "~/types/syllabus";
 import type { Route } from "./+types/syllabus";
 
 import type { MetaFunction } from "react-router";
-import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
-const origin = "https://syllabus.naist.yashikota.com";
+export const syllabusAppURL = "https://syllabus.naist.yashikota.com";
 
 export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
   const syllabusParams = params as Route.LoaderArgs["params"];
@@ -17,48 +16,28 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
       title: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
     },
     {
-      name: "description",
+      property: "og:title",
       content: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
     },
     {
-      name: "og:title",
-      content: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
+      property: "og:description",
+      content: "奈良先端科学技術大学院大学 シラバス検索/閲覧アプリ",
     },
     {
-      name: "og:description",
-      content: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
-    },
-    {
-      name: "og:site_name",
+      property: "og:site_name",
       content: "NAIST Syllabus App",
     },
     {
-      name: "og:url",
-      content: `${origin}${location.pathname}`,
+      property: "og:url",
+      content: `${syllabusAppURL}${location.pathname}`,
     },
     {
-      name: "og:image",
+      property: "og:image",
       content: "https://syllabus.naist.yashikota.com/logo.png",
     },
     {
-      name: "twitter:title",
-      content: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
-    },
-    {
-      name: "twitter:description",
-      content: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
-    },
-    {
-      name: "twitter:url",
-      content: `${origin}${location.pathname}`,
-    },
-    {
-      name: "twitter:image",
-      content: "https://syllabus.naist.yashikota.com/logo.png",
-    },
-    {
-      name: "twitter:card",
-      content: "summary",
+      name: "theme-color",
+      content: "#66c4d0",
     },
   ];
 };

@@ -2,11 +2,37 @@ import { useLoaderData } from "react-router";
 import { SyllabusCard } from "~/components/design/syllabusCard";
 import type { Courses } from "~/types/syllabus";
 import type { Route } from "./+types/home";
+import { syllabusAppURL } from "./syllabus";
 
 export function meta(_args: Route.MetaArgs) {
   return [
-    { title: "NAIST Syllabus App" },
-    { name: "description", content: "NAIST Syllabus App" },
+    {
+      title: "NAIST Syllabus App",
+    },
+    {
+      property: "og:title",
+      content: "NAIST Syllabus App",
+    },
+    {
+      property: "og:description",
+      content: "奈良先端科学技術大学院大学 シラバス検索/閲覧アプリ",
+    },
+    {
+      property: "og:site_name",
+      content: "NAIST Syllabus App",
+    },
+    {
+      property: "og:url",
+      content: syllabusAppURL,
+    },
+    {
+      property: "og:image",
+      content: "https://syllabus.naist.yashikota.com/logo.png",
+    },
+    {
+      name: "theme-color",
+      content: "#66c4d0",
+    },
   ];
 }
 
