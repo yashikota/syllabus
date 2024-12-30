@@ -6,7 +6,7 @@
     "build": "cross-env NODE_ENV=production react-router build",
     "dev": "react-router dev",
     "start": "cross-env NODE_ENV=production react-router-serve ./build/server/index.js",
-    "deploy": "wrangler pages deploy ./build/client",
+    "deploy": "npm run build && wrangler pages deploy ./build/client",
     "typecheck": "react-router typegen && tsc",
     "check": "npx biome check --write app",
     "check:ci": "npx biome ci app"
