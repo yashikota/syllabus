@@ -39,6 +39,10 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
       name: "theme-color",
       content: "#66c4d0",
     },
+    {
+      name: "robots",
+      content: "noindex",
+    }
   ];
 };
 
