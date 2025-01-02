@@ -13,21 +13,20 @@ CLASS_CODES=ST4103sp,ST4102au
 Assemble the URL using these parameters.  
 
 ```txt
-https://calendar.yashikota.workers.dev/?year={YEAR}&lang={LANG}&class_codes={CLASS_CODES}
+https://calendar.yashikota.workers.dev/{YEAR}/{LANG}/{CLASS_CODES}
 ```
 
 ### Parameters Description
 
 - `year`: Year (e.g., `2024`)
 - `lang`: Language setting (`ja` for Japanese, `en` for English)
-- `class_codes`: Comma-separated list of class codes
+- `class_codes`: Single class code or Comma-separated list of class codes
 
-### Import to Google Calendar
+### Add to Google Calendar
 
-Import the generated calendar URL into Google Calendar.  
-For detailed instructions, please refer to:  
-
-<https://support.google.com/calendar/answer/37118>
+```txt
+https://calendar.google.com/calendar/r?cid=webcal://calendar.yashikota.workers.dev/{YEAR}/{LANG}/{CLASS_CODES}
+```
 
 ## Dev
 
