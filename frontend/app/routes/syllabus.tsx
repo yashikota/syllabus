@@ -2,6 +2,7 @@ import { Link, useLoaderData, useLocation } from "react-router";
 import type { Courses } from "~/types/syllabus";
 import type { Route } from "./+types/syllabus";
 
+import { CalendarArrowUp } from "lucide-react";
 import type { MetaFunction } from "react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
@@ -107,6 +108,7 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
   }
   const syllabus = syllabuses[params.syllabusID];
   const lang = new URLSearchParams(useLocation().search).get("lang") || "ja";
+  const year = new URLSearchParams(useLocation().search).get("year") || "2024";
 
   return (
     <>
@@ -380,8 +382,23 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
         </Card>
 
         <Card className="mb-4 bg-stone-50">
-          <CardHeader>
-            <CardTitle>{lang === "ja" ? "授業情報" : "Class information"}</CardTitle>
+          <CardHeader className="flex">
+            <div className="flex justify-between items-center w-full">
+              <CardTitle>
+                {lang === "ja" ? "授業情報" : "Class information"}
+              </CardTitle>
+              <Link
+                to={`https://calendar.google.com/calendar/r?cid=webcal://calendar.yashikota.workers.dev/${year}/${lang}/${syllabus.basic_course_information.class_code}`}
+                className="text-sm text-blue-500 flex items-center"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <CalendarArrowUp className="mr-1" />
+                {lang === "ja"
+                  ? "Googleカレンダーに登録する"
+                  : "Add to Google Calendar"}
+              </Link>
+            </div>
           </CardHeader>
           <CardContent>
             {syllabus.schedule.map((item, _) => (
