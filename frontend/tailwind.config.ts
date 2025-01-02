@@ -64,10 +64,8 @@ export default {
           "5": "hsl(var(--chart-5))",
         },
         naist: {
-          DEFAULT: "#66c4d0",
-          light: "#66c4d0",
-          dark: "#66c4d0",
-        },
+          DEFAULT: "#66c4d0"
+        }
       },
     },
   },

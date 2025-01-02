@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="flex mb-2 justify-center">
         <Link
           to="https://github.com/yashikota/syllabus"
-          className="mr-4"
+          className="mr-4 text-black mb-1"
           target="_blank"
           rel="noreferrer"
         >
@@ -17,8 +17,8 @@ export default function Footer() {
           </div>
         </Link>
       </div>
-      <div className="flex justify-center">
-        <span>© 2024 NAIST Syllabus App</span>
+      <div className="flex justify-center text-sm text-black">
+        <span>© 2025 NAIST Syllabus App</span>
       </div>
     </footer>
   );

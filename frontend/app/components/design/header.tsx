@@ -17,14 +17,13 @@ export default function Header() {
       <Link to={`/?${searchParams}`} className="mr-2">
         <div className="flex items-center">
           <img src="/logo.png" alt="NAIST Apps logo" className="w-8 h-8 mr-2" />
-          <h1 className="text-xl md:text-2xl">NAIST Syllabus App</h1>
+          <h1 className="text-xl md:text-2xl text-black">NAIST Syllabus App</h1>
         </div>
       </Link>
 
       <div className="flex-grow" />
       <Button
-        variant="outline"
-        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded-full"
+        variant="secondary"
         onClick={handleLangToggle}
       >
         <LanguagesIcon />
