@@ -22,10 +22,7 @@ export default function Header() {
       </Link>
 
       <div className="flex-grow" />
-      <Button
-        variant="secondary"
-        onClick={handleLangToggle}
-      >
+      <Button variant="secondary" onClick={handleLangToggle}>
         <LanguagesIcon />
         {lang === "en" ? "日本語" : "English"}
       </Button>

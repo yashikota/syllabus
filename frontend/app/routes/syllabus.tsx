@@ -106,7 +106,7 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
     return <div className="text-center">Loading...</div>;
   }
   const syllabus = syllabuses[params.syllabusID];
-  const location = useLocation();
+  const lang = new URLSearchParams(useLocation().search).get("lang") || "ja";
 
   return (
     <>
@@ -131,57 +131,63 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
         </h1>
         <Card className="mb-4 bg-stone-50">
           <CardHeader>
-            <CardTitle>授業科目基本情報</CardTitle>
+            <CardTitle>
+              {lang === "ja" ? "授業科目基本情報" : "Basic course information"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {[
               {
-                label: "開講年度・学期",
+                label: lang === "ja" ? "開講年度・学期" : "Semester",
                 value: syllabus.basic_course_information.semester,
               },
               {
-                label: "授業番号",
+                label: lang === "ja" ? "授業番号" : "Subject number",
                 value: syllabus.basic_course_information.subject_number,
               },
               {
-                label: "授業コード",
+                label: lang === "ja" ? "授業コード" : "Class code",
                 value: syllabus.basic_course_information.class_code,
               },
               {
-                label: "授業名",
+                label: lang === "ja" ? "授業名" : "Class name",
                 value: syllabus.basic_course_information.class_name,
               },
               {
-                label: "科目区分",
+                label: lang === "ja" ? "科目区分" : "Course type",
                 value: syllabus.basic_course_information.course_type,
               },
               {
-                label: "教職科目",
+                label: lang === "ja" ? "教職科目" : "Teacher training course",
                 value:
                   syllabus.basic_course_information.teacher_training_course,
               },
               {
-                label: "単位数",
+                label: lang === "ja" ? "単位数" : "Number of Credits",
                 value: syllabus.basic_course_information.number_of_credits,
               },
               {
-                label: "選択・必修・自由",
+                label:
+                  lang === "ja"
+                    ? "選択・必修・自由"
+                    : "Required・Elective etc.",
                 value: syllabus.basic_course_information.required_elective_etc,
               },
               {
-                label: "授業形態",
+                label: lang === "ja" ? "授業形態" : "Style",
                 value: syllabus.basic_course_information.style,
               },
               {
-                label: "主な使用言語",
+                label: lang === "ja" ? "主な使用言語" : "Main Language",
                 value: syllabus.basic_course_information.main_language,
               },
               {
-                label: "開講時期",
+                label: lang === "ja" ? "開講時期" : "Scheduling",
                 value: syllabus.basic_course_information.scheduling,
               },
               {
-                label: "履修登録の要否",
+                label:
+                  lang === "ja" ? "履修登録の要否" : "Subject Registration",
                 value: syllabus.basic_course_information.subject_registration,
               },
             ].map((item, index, array) => (
@@ -200,13 +206,21 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
 
         <Card className="mb-4 bg-stone-50">
           <CardHeader>
-            <CardTitle>教育プログラム別の履修区分</CardTitle>
+            <CardTitle>
+              {lang === "ja"
+                ? "教育プログラム別の履修区分"
+                : "Registration Category"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap pb-2">
               <div className="w-1/6">
-                <div className="py-2 mt-10">履修区分</div>
-                <div className="py-2">コア科目</div>
+                <div className="py-2">
+                  {lang === "ja" ? "履修区分" : "Registration Category"}
+                </div>
+                <div className="py-2">
+                  {lang === "ja" ? "コア科目" : "Core Subjects"}
+                </div>
               </div>
               {Object.entries(syllabus.registration_category).map(
                 ([key, value]) =>
@@ -231,24 +245,30 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
 
         <Card className="mb-4 bg-stone-50">
           <CardHeader>
-            <CardTitle>授業科目概要</CardTitle>
+            <CardTitle>{lang === "ja" ? "授業科目概要" : "Overview"}</CardTitle>
           </CardHeader>
           <CardContent>
             {[
               {
-                label: "担当責任教員",
+                label: lang === "ja" ? "担当責任教員" : "Supervising lecturer",
                 value: syllabus.overview.supervising_lecturer,
               },
               {
-                label: "担当教員",
+                label: lang === "ja" ? "担当教員" : "Lecturer",
                 value: syllabus.overview.lecturer,
               },
               {
-                label: "教育目的 / 学修到達目標",
+                label:
+                  lang === "ja"
+                    ? "教育目的 / 学修到達目標"
+                    : "Learning Objectives / Goals",
                 value: syllabus.overview.learning_objective_goals,
               },
               {
-                label: "授業概要 / 指導方針",
+                label:
+                  lang === "ja"
+                    ? "授業概要 / 指導方針"
+                    : "Course Outline / Teaching Method",
                 value: syllabus.overview.outline_teaching_method,
               },
             ].map((item, index, array) => (
@@ -267,16 +287,18 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
 
         <Card className="mb-4 bg-stone-50">
           <CardHeader>
-            <CardTitle>テキスト・参考書</CardTitle>
+            <CardTitle>
+              {lang === "ja" ? "テキスト・参考書" : "Textbook/Reference book"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {[
               {
-                label: "テキスト",
+                label: lang === "ja" ? "テキスト" : "Textbook",
                 value: syllabus.textbook_reference.textbook,
               },
               {
-                label: "参考書",
+                label: lang === "ja" ? "参考書" : "Reference book",
                 value: syllabus.textbook_reference.reference_book,
               },
             ].map((item, index, array) => (
@@ -295,32 +317,34 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
 
         <Card className="mb-4 bg-stone-50">
           <CardHeader>
-            <CardTitle>その他</CardTitle>
+            <CardTitle>
+              {lang === "ja" ? "その他" : "Other information"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {[
               {
-                label: "履修条件",
+                label: lang === "ja" ? "履修条件" : "Prerequisites",
                 value: syllabus.other_information.prerequisites,
               },
               {
-                label: "オフィスアワー",
+                label: lang === "ja" ? "オフィスアワー" : "Office hour",
                 value: syllabus.other_information.office_hour,
               },
               {
-                label: "成績評価の方法と基準",
+                label: lang === "ja" ? "成績評価の方法と基準" : "Grading",
                 value: syllabus.other_information.grading,
               },
               {
-                label: "関連科目",
+                label: lang === "ja" ? "関連科目" : "Related subjects",
                 value: syllabus.other_information.related_subjects,
               },
               {
-                label: "関連学位",
+                label: lang === "ja" ? "関連学位" : "Related Degree",
                 value: syllabus.other_information.related_degrees,
               },
               {
-                label: "注意事項",
+                label: lang === "ja" ? "注意事項" : "Notice",
                 value: syllabus.other_information.notice,
               },
             ].map((item, index, array) => (
@@ -339,21 +363,25 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
 
         <Card className="mb-4 bg-stone-50">
           <CardHeader>
-            <CardTitle>授業関連URL</CardTitle>
+            <CardTitle>
+              {lang === "ja" ? "授業関連URL" : "Lecture related URL"}
+            </CardTitle>
           </CardHeader>
           <CardContent>{linkify(syllabus.url)}</CardContent>
         </Card>
 
         <Card className="mb-4 bg-stone-50">
           <CardHeader>
-            <CardTitle>その他参考資料等</CardTitle>
+            <CardTitle>
+              {lang === "ja" ? "その他参考資料等" : "References"}
+            </CardTitle>
           </CardHeader>
           <CardContent>{linkify(syllabus.references)}</CardContent>
         </Card>
 
         <Card className="mb-4 bg-stone-50">
           <CardHeader>
-            <CardTitle>スケジュール</CardTitle>
+            <CardTitle>{lang === "ja" ? "授業情報" : "Class information"}</CardTitle>
           </CardHeader>
           <CardContent>
             {syllabus.schedule.map((item, _) => (
