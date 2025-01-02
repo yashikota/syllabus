@@ -1,5 +1,5 @@
 import { useLoaderData } from "react-router";
-import { SyllabusCard } from "~/components/design/syllabusCard";
+import { SyllabusCard } from "~/components/design/card";
 import type { Courses } from "~/types/syllabus";
 import type { Route } from "./+types/home";
 import { syllabusAppURL } from "./syllabus";
@@ -36,10 +36,13 @@ export function meta(_args: Route.MetaArgs) {
   ];
 }
 
-export async function loader() {
+export async function loader({ request }: { request: Request }) {
+  const url = new URL(request.url);
+  const lang = url.searchParams.get("lang") || "ja";
+  const year = url.searchParams.get("year") || "2024";
   try {
-    const url = "https://yashikota.github.io/syllabus/2024-ja.json";
-    const res = await fetch(url);
+    const syllabusUrl = `https://yashikota.github.io/syllabus/${year}-${lang}.json`;
+    const res = await fetch(syllabusUrl);
     if (!res.ok) {
       throw new Error("Failed to fetch");
     }
@@ -58,6 +61,7 @@ export default function Home() {
 
   return (
     <main className="m-4">
+      {/* <Search /> */}
       <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4">
         {Object.entries(syllabuses).map(([key, course]) => (
           <SyllabusCard key={key} course={course} />

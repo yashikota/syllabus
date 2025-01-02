@@ -42,13 +42,16 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
     {
       name: "robots",
       content: "noindex",
-    }
+    },
   ];
 };
 
-export async function loader() {
+export async function loader({ request }: { request: Request }) {
+  const url = new URL(request.url);
+  const lang = url.searchParams.get("lang") || "ja";
+  const year = url.searchParams.get("year") || "2024";
   try {
-    const url = "https://yashikota.github.io/syllabus/2024-ja.json";
+    const url = `https://yashikota.github.io/syllabus/${year}-${lang}.json`;
     const res = await fetch(url);
     if (!res.ok) {
       throw new Error("Failed to fetch");
@@ -126,7 +129,7 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
         <h1 className="text-2xl font-bold m-4">
           {syllabus.basic_course_information.class_name}
         </h1>
-        <Card className="mb-4">
+        <Card className="mb-4 bg-stone-50">
           <CardHeader>
             <CardTitle>授業科目基本情報</CardTitle>
           </CardHeader>
@@ -195,7 +198,7 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
           </CardContent>
         </Card>
 
-        <Card className="mb-4">
+        <Card className="mb-4 bg-stone-50">
           <CardHeader>
             <CardTitle>教育プログラム別の履修区分</CardTitle>
           </CardHeader>
@@ -226,7 +229,7 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
           </CardContent>
         </Card>
 
-        <Card className="mb-4">
+        <Card className="mb-4 bg-stone-50">
           <CardHeader>
             <CardTitle>授業科目概要</CardTitle>
           </CardHeader>
@@ -262,7 +265,7 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
           </CardContent>
         </Card>
 
-        <Card className="mb-4">
+        <Card className="mb-4 bg-stone-50">
           <CardHeader>
             <CardTitle>テキスト・参考書</CardTitle>
           </CardHeader>
@@ -290,7 +293,7 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
           </CardContent>
         </Card>
 
-        <Card className="mb-4">
+        <Card className="mb-4 bg-stone-50">
           <CardHeader>
             <CardTitle>その他</CardTitle>
           </CardHeader>
@@ -334,21 +337,21 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
           </CardContent>
         </Card>
 
-        <Card className="mb-4">
+        <Card className="mb-4 bg-stone-50">
           <CardHeader>
             <CardTitle>授業関連URL</CardTitle>
           </CardHeader>
           <CardContent>{linkify(syllabus.url)}</CardContent>
         </Card>
 
-        <Card className="mb-4">
+        <Card className="mb-4 bg-stone-50">
           <CardHeader>
             <CardTitle>その他参考資料等</CardTitle>
           </CardHeader>
           <CardContent>{linkify(syllabus.references)}</CardContent>
         </Card>
 
-        <Card className="mb-4">
+        <Card className="mb-4 bg-stone-50">
           <CardHeader>
             <CardTitle>スケジュール</CardTitle>
           </CardHeader>
