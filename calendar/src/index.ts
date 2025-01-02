@@ -109,13 +109,13 @@ function generateICS(syllabus: any[], year: string): Promise<string> {
   }
 }
 
-app.get("/", async (c) => {
-  const year = c.req.query("year");
+app.get("/:year/:lang/:class_codes", async (c) => {
+  const year = c.req.param("year");
   if (!year) {
     return c.text("year is required", 400);
   }
 
-  const lang = c.req.query("lang");
+  const lang = c.req.param("lang");
   if (!lang) {
     return c.text("lang is required", 400);
   }
@@ -126,7 +126,7 @@ app.get("/", async (c) => {
   const url = `https://yashikota.github.io/syllabus/${year}-${lang}.json`;
   const syllabuses: Courses = await fetch(url).then((res) => res.json());
 
-  const classCodes = c.req.query("class_codes");
+  const classCodes = c.req.param("class_codes");
   if (!classCodes) {
     return c.text("class_codes is required", 400);
   }
