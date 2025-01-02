@@ -69,13 +69,17 @@ function generateICS(syllabus: any[], year: string): Promise<string> {
         const { start, end } = parseDateTime(lesson.datetime, year);
         const syllabusUrl = `https://syllabus.naist.yashikota.com/${course.class_code}`;
         const description = `${lesson.content.replace(/\\n/g, "\n")}\n${syllabusUrl}`;
+        const calName =
+          syllabus.length === 1
+            ? `${class_name} | NAIST Syllabus App`
+            : "NAIST Syllabus App";
         const title = `${class_name} | ${lesson.theme.replace(/\\n/g, "")}`;
 
         return {
-          calName: `NAIST Syllabus App ${year}`,
+          calName,
           start,
           end,
-          title: title,
+          title,
           location: lesson.room,
           description,
           status: "CONFIRMED",
