@@ -7,8 +7,11 @@ export default function Header() {
   const lang = searchParams.get("lang") || "ja";
 
   function handleLangToggle() {
-    const newLang = lang === "en" ? "ja" : "en";
-    searchParams.set("lang", newLang);
+    if (lang === "en") {
+      searchParams.delete("lang");
+    } else {
+      searchParams.set("lang", "en");
+    }
     setSearchParams(searchParams);
   }
 

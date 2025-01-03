@@ -7,7 +7,7 @@ import type { MetaFunction } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
-export const syllabusAppURL = "https://syllabus.naist.yashikota.com";
+export const syllabusAppURL = "https://syllabus.naist.yashikota.com/";
 
 export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
   const syllabusParams = params as Route.LoaderArgs["params"];
@@ -16,6 +16,19 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
   return [
     {
       title: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
+    },
+    {
+      name: "description",
+      content: "奈良先端科学技術大学院大学 シラバス検索/閲覧アプリ",
+    },
+    {
+      link: `rel="alternate" hreflang="ja" href="${syllabusAppURL}${location.pathname}"`,
+    },
+    {
+      link: `rel="alternate" hreflang="en" href="${syllabusAppURL}${location.pathname}?lang=en"`,
+    },
+    {
+      link: `rel="alternate" hreflang="x-default" href="${syllabusAppURL}${location.pathname}?lang=en"`,
     },
     {
       property: "og:title",
@@ -36,6 +49,10 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
     {
       property: "og:image",
       content: "https://syllabus.naist.yashikota.com/logo.png",
+    },
+    {
+      property: "og:type",
+      content: "website",
     },
     {
       name: "theme-color",

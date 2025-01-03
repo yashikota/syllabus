@@ -10,12 +10,21 @@ export function meta(_args: Route.MetaArgs) {
       title: "NAIST Syllabus App",
     },
     {
-      property: "og:title",
-      content: "NAIST Syllabus App",
+      name: "description",
+      content: "奈良先端科学技術大学院大学 シラバス検索/閲覧アプリ",
     },
     {
-      property: "og:description",
-      content: "奈良先端科学技術大学院大学 シラバス検索/閲覧アプリ",
+      link: `rel="alternate" hreflang="ja" href="${syllabusAppURL}"`,
+    },
+    {
+      link: `rel="alternate" hreflang="en" href="${syllabusAppURL}?lang=en"`,
+    },
+    {
+      link: `rel="alternate" hreflang="x-default" href="${syllabusAppURL}?lang=en"`,
+    },
+    {
+      property: "og:title",
+      content: "NAIST Syllabus App",
     },
     {
       property: "og:site_name",
@@ -28,6 +37,10 @@ export function meta(_args: Route.MetaArgs) {
     {
       property: "og:image",
       content: "https://syllabus.naist.yashikota.com/logo.png",
+    },
+    {
+      property: "og:type",
+      content: "website",
     },
     {
       name: "theme-color",
