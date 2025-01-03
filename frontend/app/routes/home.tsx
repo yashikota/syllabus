@@ -14,6 +14,10 @@ export function meta(_args: Route.MetaArgs) {
       content: "奈良先端科学技術大学院大学 シラバス検索/閲覧アプリ",
     },
     {
+      name: "theme-color",
+      content: "#66c4d0",
+    },
+    {
       link: `rel="alternate" hreflang="ja" href="${syllabusAppURL}"`,
     },
     {
@@ -25,6 +29,10 @@ export function meta(_args: Route.MetaArgs) {
     {
       property: "og:title",
       content: "NAIST Syllabus App",
+    },
+    {
+      property: "og:description",
+      content: "奈良先端科学技術大学院大学 シラバス検索/閲覧アプリ",
     },
     {
       property: "og:site_name",
@@ -43,8 +51,8 @@ export function meta(_args: Route.MetaArgs) {
       content: "website",
     },
     {
-      name: "theme-color",
-      content: "#66c4d0",
+      property: "twitter:card",
+      content: "summary",
     },
   ];
 }

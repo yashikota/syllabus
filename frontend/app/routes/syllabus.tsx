@@ -22,6 +22,14 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
       content: "奈良先端科学技術大学院大学 シラバス検索/閲覧アプリ",
     },
     {
+      name: "theme-color",
+      content: "#66c4d0",
+    },
+    {
+      name: "robots",
+      content: "noindex",
+    },
+    {
       link: `rel="alternate" hreflang="ja" href="${syllabusAppURL}${location.pathname}"`,
     },
     {
@@ -55,12 +63,8 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
       content: "website",
     },
     {
-      name: "theme-color",
-      content: "#66c4d0",
-    },
-    {
-      name: "robots",
-      content: "noindex",
+      property: "twitter:card",
+      content: "summary",
     },
   ];
 };
