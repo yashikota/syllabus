@@ -411,10 +411,12 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
               target="_blank"
               rel="noreferrer"
             >
-              <CalendarArrowUp className="mr-1" />
-              {lang === "ja"
-                ? "Googleカレンダーに登録する"
-                : "Add to Google Calendar"}
+              <Button size="sm" className="bg-emerald-500 hover:bg-emerald-700">
+                <CalendarArrowUp className="mr-1" />
+                {lang === "ja"
+                  ? "Googleカレンダーに登録する"
+                  : "Add to Google Calendar"}
+              </Button>
             </Link>
           </div>
         </CardHeader>

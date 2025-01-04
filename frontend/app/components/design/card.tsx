@@ -8,13 +8,16 @@ export function SyllabusCard({ course }: { course: Course }) {
   return (
     <Card className="bg-stone-50 hover:shadow-lg">
       <Link
-        to={`/${course.basic_course_information.class_code}?${searchParams}`}
+        to={`/${course.basic_course_information.class_code}${
+          searchParams.get("lang") === "en" ? "?lang=en" : ""
+        }`}
       >
         <div className="p-4">
           <div>
             {course.basic_course_information.course_type} |{" "}
             {course.basic_course_information.style}
           </div>
+          <div className="text-md font-semibold" />
           <div className="text-md font-semibold">
             [{course.basic_course_information.class_code}]{" "}
             {course.basic_course_information.class_name}

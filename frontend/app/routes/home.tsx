@@ -1,6 +1,10 @@
-import { useLoaderData } from "react-router";
+import { useEffect, useMemo, useState } from "react";
+import { useFetcher, useLoaderData } from "react-router";
+import { useSearchParams } from "react-router";
 import { SyllabusCard } from "~/components/design/card";
+import Search from "~/components/design/search";
 import type { Courses } from "~/types/syllabus";
+import { syllabusCache } from "~/utils/cache";
 import type { Route } from "./+types/home";
 import { syllabusAppURL } from "./syllabus";
 
@@ -61,13 +65,21 @@ export async function loader({ request }: { request: Request }) {
   const url = new URL(request.url);
   const lang = url.searchParams.get("lang") || "ja";
   const year = url.searchParams.get("year") || "2024";
+  const cacheKey = `${year}-${lang}`;
+
+  // Cache check
+  const cached = syllabusCache.get(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   try {
     const syllabusUrl = `https://yashikota.github.io/syllabus/${year}-${lang}.json`;
     const res = await fetch(syllabusUrl);
-    if (!res.ok) {
-      throw new Error("Failed to fetch");
-    }
-    return (await res.json()) as Courses;
+    if (!res.ok) throw new Error("Failed to fetch");
+    const data = (await res.json()) as Courses;
+    syllabusCache.set(cacheKey, data);
+    return data;
   } catch (e) {
     console.error("Failed to fetch", e);
     return {};
@@ -75,16 +87,65 @@ export async function loader({ request }: { request: Request }) {
 }
 
 export default function Home() {
-  const syllabuses = useLoaderData() as Courses;
+  const initialSyllabuses = useLoaderData() as Courses;
+  const fetcher = useFetcher();
+  const [searchParams] = useSearchParams();
+  const lang = searchParams.get("lang") || "ja";
+  const query = searchParams.get("q")?.toLowerCase() || "";
+  const rawTargets = searchParams.get("targets");
+  const targets = rawTargets
+    ? rawTargets.split(",")
+    : ["class_name", "lecturer", "class_code_number"];
+
+  const syllabuses = (fetcher.data as Courses) || initialSyllabuses;
+
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted && fetcher.state === "idle") {
+      fetcher.load(`/home?lang=${lang}`);
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [lang, fetcher]);
+
   if (!syllabuses || Object.keys(syllabuses).length === 0) {
     return <div className="text-center">Loading...</div>;
   }
 
+  const filteredSyllabuses = useMemo(() => {
+    return Object.entries(syllabuses).filter(([_, course]) => {
+      if (!query) return true;
+
+      return targets.some((target) => {
+        switch (target) {
+          case "class_name":
+            return course.basic_course_information.class_name
+              .toLowerCase()
+              .includes(query);
+          case "lecturer":
+            return course.overview.lecturer.toLowerCase().includes(query);
+          case "class_code_number":
+            return (
+              course.basic_course_information.class_code
+                .toLowerCase()
+                .includes(query) ||
+              course.basic_course_information.subject_number
+                .toLowerCase()
+                .includes(query)
+            );
+          default:
+            return false;
+        }
+      });
+    });
+  }, [syllabuses, query, targets]);
+
   return (
     <main className="m-4">
-      {/* <Search /> */}
+      <Search />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {Object.entries(syllabuses).map(([key, course]) => (
+        {filteredSyllabuses.map(([key, course]) => (
           <SyllabusCard key={key} course={course} />
         ))}
       </div>

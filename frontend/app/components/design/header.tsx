@@ -16,7 +16,7 @@ export default function Header() {
   }
 
   return (
-    <header className="flex bg-naist text-white p-4">
+    <header className="flex bg-naist p-2">
       <Link to={`/?${searchParams}`} className="mr-2">
         <div className="flex items-center">
           <img src="/logo.png" alt="NAIST Apps logo" className="w-8 h-8 mr-2" />

@@ -7,7 +7,7 @@ import {
   isRouteErrorResponse,
 } from "react-router";
 
-// import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
+import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 import type { Route } from "./+types/root";
 import stylesheet from "./app.css?url";
 import Footer from "./components/design/footer";
@@ -53,13 +53,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <>
+    <div className="bg-stone-100">
       <Header />
-      {/* <NuqsAdapter> */}
-      <Outlet />
-      {/* </NuqsAdapter> */}
+      <NuqsAdapter>
+        <Outlet />
+      </NuqsAdapter>
       <Footer />
-    </>
+    </div>
   );
 }
 
