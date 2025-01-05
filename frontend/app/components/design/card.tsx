@@ -6,7 +6,7 @@ import type { Course } from "~/types/syllabus";
 export function SyllabusCard({ course }: { course: Course }) {
   const [searchParams] = useSearchParams();
   return (
-    <Card className="bg-stone-50 hover:shadow-lg">
+    <Card className="bg-stone-50 hover:bg-stone-200">
       <Link
         to={`/${course.basic_course_information.class_code}${
           searchParams.get("lang") === "en" ? "?lang=en" : ""
@@ -17,7 +17,6 @@ export function SyllabusCard({ course }: { course: Course }) {
             {course.basic_course_information.course_type} |{" "}
             {course.basic_course_information.style}
           </div>
-          <div className="text-md font-semibold" />
           <div className="text-md font-semibold">
             [{course.basic_course_information.class_code}]{" "}
             {course.basic_course_information.class_name}
