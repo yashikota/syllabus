@@ -158,31 +158,207 @@ export default function Home() {
 
   const filteredSyllabuses = useMemo(() => {
     return Object.entries(syllabuses).filter(([_, course]) => {
-      if (!query) return true;
+      if (query) {
+        const matchesQuery = targets.some((target) => {
+          switch (target) {
+            case "class_name":
+              return course.basic_course_information.class_name
+                .toLowerCase()
+                .includes(query);
+            case "lecturer":
+              return course.overview.lecturer.toLowerCase().includes(query);
+            case "class_code_number":
+              return (
+                course.basic_course_information.class_code
+                  .toLowerCase()
+                  .includes(query) ||
+                course.basic_course_information.subject_number
+                  .toLowerCase()
+                  .includes(query)
+              );
+            default:
+              return false;
+          }
+        });
+        if (!matchesQuery) return false;
+      }
 
-      return targets.some((target) => {
-        switch (target) {
-          case "class_name":
-            return course.basic_course_information.class_name
-              .toLowerCase()
-              .includes(query);
-          case "lecturer":
-            return course.overview.lecturer.toLowerCase().includes(query);
-          case "class_code_number":
-            return (
-              course.basic_course_information.class_code
-                .toLowerCase()
-                .includes(query) ||
-              course.basic_course_information.subject_number
-                .toLowerCase()
-                .includes(query)
-            );
-          default:
-            return false;
-        }
-      });
+      if (semester.length > 0) {
+        const v = course.basic_course_information.semester;
+        const matchesSemester = semester.some((sem) => {
+          if (sem === "spring") {
+            return v.includes("春") || v.includes("Spring");
+          }
+          if (sem === "fall") {
+            return v.includes("秋") || v.includes("Fall");
+          }
+          return false;
+        });
+        if (!matchesSemester) return false;
+      }
+
+      if (courseType.length > 0) {
+        const v = course.basic_course_information.course_type;
+        const matchesCourseType = courseType.some((type) => {
+          switch (type) {
+            case "general":
+              return v.includes("一般") || v.includes("General");
+            case "introduction":
+              return v.includes("序論") || v.includes("Introduction");
+            case "basic":
+              return v.includes("基盤") || v.includes("Basic");
+            case "specialized":
+              return v.includes("専門") || v.includes("Specialized");
+            case "pbl":
+              return v.includes("PBL") || v.includes("PBL");
+            case "research-based":
+              return v.includes("研究活動") || v.includes("Research-based");
+            case "research-skills":
+              return (
+                v.includes("研究者の素養") || v.includes("Research Skills")
+              );
+            case "independent-research":
+              return (
+                v.includes("自立的な研究能力") ||
+                v.includes("Research Abilities")
+              );
+            default:
+              return false;
+          }
+        });
+        if (!matchesCourseType) return false;
+      }
+
+      if (teacherTraining.length > 0) {
+        const v = course.basic_course_information.teacher_training_course;
+        const matchesTraining = teacherTraining.some((training) => {
+          switch (training) {
+            case "information":
+              return v === "情報" || v === "Information";
+            case "science":
+              return v === "理科" || v === "Science";
+            case "none":
+              return v === "指定なし" || v === "none";
+            default:
+              return false;
+          }
+        });
+        if (!matchesTraining) return false;
+      }
+
+      if (credits.length > 0) {
+        const v = course.basic_course_information.number_of_credits;
+        const matchesCredits = credits.some((credit) => {
+          return v.includes(credit);
+        });
+        if (!matchesCredits) return false;
+      }
+
+      if (required.length > 0) {
+        const v = course.basic_course_information.required_elective_etc;
+        const matchesRequired = required.some((req) => {
+          switch (req) {
+            case "elective":
+              return v === "選択" || v === "Elective";
+            case "required":
+              return v === "必修" || v === "Required";
+            case "required-elective":
+              return v === "選択必修" || v === "Required-Elective";
+            case "free":
+              return v === "自由" || v === "Free";
+            default:
+              return false;
+          }
+        });
+        if (!matchesRequired) return false;
+      }
+
+      if (style.length > 0) {
+        const v = course.basic_course_information.style;
+        const matchesStyle = style.some((s) => {
+          switch (s) {
+            case "lecture":
+              return v === "講義" || v === "Lecture";
+            case "seminar":
+              return v === "演習" || v === "Seminar";
+            case "thesis":
+              return v === "論文" || v === "Thesis";
+            default:
+              return false;
+          }
+        });
+        if (!matchesStyle) return false;
+      }
+
+      if (language.length > 0) {
+        const v = course.basic_course_information.main_language;
+        const matchesLanguage = language.some((lang) => {
+          switch (lang) {
+            case "ja":
+              return v === "日本語" || v === "Japanese";
+            case "en":
+              return v === "英語" || v === "English";
+            case "ja/en":
+              return v === "日本語/英語" || v === "Japanese/English";
+            default:
+              return false;
+          }
+        });
+        if (!matchesLanguage) return false;
+      }
+
+      if (scheduling.length > 0) {
+        const v = course.basic_course_information.scheduling;
+        const matchesScheduling = scheduling.some((schedule) => {
+          switch (schedule) {
+            case "1":
+              return v === "I";
+            case "2":
+              return v === "II";
+            case "3":
+              return v === "III";
+            case "none":
+              return v === "日程の設定なし" || v === "No set of dates";
+            case "intensive":
+              return v === "集中講義" || v === "Intensive course";
+            default:
+              return false;
+          }
+        });
+        if (!matchesScheduling) return false;
+      }
+
+      if (registration.length > 0) {
+        const v = course.basic_course_information.subject_registration;
+        const matchesRegistration = registration.some((reg) => {
+          switch (reg) {
+            case "required":
+              return v === "必要" || v === "Required";
+            case "not_required":
+              return v === "不要" || v === "Not required";
+            default:
+              return false;
+          }
+        });
+        if (!matchesRegistration) return false;
+      }
+
+      return true;
     });
-  }, [syllabuses, query, targets]);
+  }, [
+    syllabuses,
+    query,
+    targets,
+    semester,
+    courseType,
+    teacherTraining,
+    credits,
+    required,
+    style,
+    language,
+    scheduling,
+    registration,
+  ]);
 
   return (
     <main className="m-4">
@@ -212,9 +388,15 @@ export default function Home() {
         INITIAL_TARGETS={INITIAL_TARGETS}
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {filteredSyllabuses.map(([key, course]) => (
-          <SyllabusCard key={key} course={course} />
-        ))}
+        {filteredSyllabuses
+          .sort(([_, a], [__, b]) =>
+            a.basic_course_information.class_code.localeCompare(
+              b.basic_course_information.class_code,
+            ),
+          )
+          .map(([key, course]) => (
+            <SyllabusCard key={key} course={course} />
+          ))}
       </div>
     </main>
   );
