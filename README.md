@@ -1,13 +1,9 @@
 # syllabus
 
-## scraping
-
-[README](scraping/README.md)
-
 ## frontend
 
 [README](frontend/README.md)
 
-## calendar
+## scraping
 
-[README](calendar/README.md)
+[README](scraping/README.md)
