@@ -135,7 +135,6 @@ export const MultiSelect = React.forwardRef<
     ref,
   ) => {
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
-
     const selectedValues = value || [];
 
     const toggleOption = (option: string) => {

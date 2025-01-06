@@ -53,10 +53,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <div className="bg-stone-100">
+    <div className="flex flex-col min-h-screen bg-stone-100">
       <Header />
       <NuqsAdapter>
-        <Outlet />
+        <div className="flex-grow">
+          <Outlet />
+        </div>
       </NuqsAdapter>
       <Footer />
     </div>
