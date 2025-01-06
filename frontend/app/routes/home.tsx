@@ -1,6 +1,6 @@
 import { useQueryState } from "nuqs";
 import { useMemo } from "react";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useLocation } from "react-router";
 import { SyllabusCard } from "~/components/design/card";
 import Search from "~/components/design/search";
 import type { Courses } from "~/types/syllabus";
@@ -78,6 +78,8 @@ export async function loader({ request }: { request: Request }) {
 }
 
 export default function Home() {
+  const lang = new URLSearchParams(useLocation().search).get("lang") || "ja";
+
   const syllabuses = useLoaderData() as Courses;
   if (!syllabuses || Object.keys(syllabuses).length === 0) {
     return <div className="text-center">Loading...</div>;
@@ -387,17 +389,25 @@ export default function Home() {
         setRegistration={setRegistration}
         INITIAL_TARGETS={INITIAL_TARGETS}
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {filteredSyllabuses
-          .sort(([_, a], [__, b]) =>
-            a.basic_course_information.class_code.localeCompare(
-              b.basic_course_information.class_code,
-            ),
-          )
-          .map(([key, course]) => (
-            <SyllabusCard key={key} course={course} />
-          ))}
-      </div>
+      {filteredSyllabuses.length === 0 ? (
+        <div className="text-center text-xl mt-8 text-gray-500">
+          {lang === "ja"
+            ? "検索結果が見つかりませんでした。"
+            : "No results found."}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {filteredSyllabuses
+            .sort(([_, a], [__, b]) =>
+              a.basic_course_information.class_code.localeCompare(
+                b.basic_course_information.class_code,
+              ),
+            )
+            .map(([key, course]) => (
+              <SyllabusCard key={key} course={course} />
+            ))}
+        </div>
+      )}
     </main>
   );
 }
