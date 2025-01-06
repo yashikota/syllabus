@@ -4,7 +4,7 @@
 
 ```sh
 npm i
-npm run dev
+npm run preview
 ```
 
 ## Build
