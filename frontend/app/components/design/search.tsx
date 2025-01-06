@@ -1,9 +1,10 @@
-import { SquareCheckBig } from "lucide-react";
+import { Share2, SquareCheckBig } from "lucide-react";
 import { useMemo } from "react";
 import { useLocation } from "react-router";
 import { MultiSelect } from "~/components/design/multi-select";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { syllabusAppURL } from "~/routes/syllabus";
 
 export default function Search(props: {
   query: string;
@@ -448,6 +449,30 @@ export default function Search(props: {
           }
           lang={lang}
         />
+      </div>
+
+      <div className="grid grid-cols-1">
+        <Button
+          className="bg-emerald-500 hover:bg-emerald-700"
+          onClick={async () => {
+            if (navigator.share) {
+              await navigator.share({
+                title: document.title,
+                text: "NAIST Syllabus App",
+                url: syllabusAppURL + window.location.pathname,
+              });
+            } else {
+              const msg =
+                lang === "ja"
+                  ? "このブラウザはシェア機能に対応していません"
+                  : "This browser does not support sharing";
+              alert(msg);
+            }
+          }}
+        >
+          <Share2 />
+          {lang === "ja" ? "検索結果を共有" : "Share search results"}
+        </Button>
       </div>
     </div>
   );

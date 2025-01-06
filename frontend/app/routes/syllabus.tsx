@@ -7,7 +7,7 @@ import type { MetaFunction } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
-export const syllabusAppURL = "https://syllabus.naist.yashikota.com/";
+export const syllabusAppURL = "https://syllabus.naist.yashikota.com";
 
 export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
   const syllabusParams = params as Route.LoaderArgs["params"];
@@ -30,13 +30,13 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
       content: "noindex",
     },
     {
-      link: `rel="alternate" hreflang="ja" href="${syllabusAppURL}${location.pathname}"`,
+      link: `rel="alternate" hreflang="ja" href="${syllabusAppURL}/${location.pathname}"`,
     },
     {
-      link: `rel="alternate" hreflang="en" href="${syllabusAppURL}${location.pathname}?lang=en"`,
+      link: `rel="alternate" hreflang="en" href="${syllabusAppURL}/${location.pathname}?lang=en"`,
     },
     {
-      link: `rel="alternate" hreflang="x-default" href="${syllabusAppURL}${location.pathname}?lang=en"`,
+      link: `rel="alternate" hreflang="x-default" href="${syllabusAppURL}/${location.pathname}?lang=en"`,
     },
     {
       property: "og:title",
@@ -52,7 +52,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
     },
     {
       property: "og:url",
-      content: `${syllabusAppURL}${location.pathname}`,
+      content: `${syllabusAppURL}/${location.pathname}`,
     },
     {
       property: "og:image",
@@ -237,6 +237,9 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
         <CardContent>
           <div className="flex flex-wrap pb-2">
             <div className="w-1/6">
+              <div className="py-2">
+                {lang === "ja" ? "プログラム名" : "Education Programs"}
+              </div>
               <div className="py-2">
                 {lang === "ja" ? "履修区分" : "Registration Category"}
               </div>
