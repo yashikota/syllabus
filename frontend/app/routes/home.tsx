@@ -319,6 +319,8 @@ export default function Home() {
               return v === "II";
             case "3":
               return v === "III";
+            case "4":
+              return v === "IV";
             case "none":
               return v === "日程の設定なし" || v === "No set of dates";
             case "intensive":

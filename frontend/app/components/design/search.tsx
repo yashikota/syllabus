@@ -419,6 +419,7 @@ export default function Search(props: {
             { value: "1", label: "I" },
             { value: "2", label: "II" },
             { value: "3", label: "III" },
+            { value: "4", label: "IV" },
             {
               value: "none",
               label: lang === "ja" ? "日程の設定なし" : "No set of dates",
