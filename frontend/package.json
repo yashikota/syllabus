@@ -9,8 +9,8 @@
     "start": "wrangler pages dev ./build/client",
     "deploy": "npm run build && wrangler pages deploy",
     "typecheck": "react-router typegen && tsc",
-    "check": "npx biome check --write app",
-    "check:ci": "npx biome ci app"
+    "check": "npx biome check --write app server",
+    "check:ci": "npx biome ci app server"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.4",
@@ -24,6 +24,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",
     "hono-react-router-adapter": "^0.6.0",
+    "ics": "^3.8.1",
     "isbot": "^5.1.17",
     "lucide-react": "^0.469.0",
     "next-themes": "^0.4.4",

@@ -406,7 +406,7 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
               {lang === "ja" ? "授業情報" : "Class information"}
             </CardTitle>
             <Link
-              to={`https://calendar.google.com/calendar/r?cid=webcal://calendar.yashikota.workers.dev/${year}/${lang}/${syllabus.basic_course_information.class_code}`}
+              to={`https://calendar.google.com/calendar/r?cid=webcal://syllabus.naist.yashikota.com/ics/${year}/${lang}/${syllabus.basic_course_information.class_code}`}
               className="text-sm text-blue-500 flex items-center"
               target="_blank"
               rel="noreferrer"

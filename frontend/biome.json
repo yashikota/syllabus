@@ -20,6 +20,9 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "suspicious": {
+        "noExplicitAny": "off"
+      },
       "security": {
         "noDangerouslySetInnerHtml": "off"
       }
