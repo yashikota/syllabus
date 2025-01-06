@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
-import { useFetcher, useLoaderData } from "react-router";
+import { useMemo } from "react";
+import { useLoaderData } from "react-router";
 import { useSearchParams } from "react-router";
 import { SyllabusCard } from "~/components/design/card";
 import Search from "~/components/design/search";
 import type { Courses } from "~/types/syllabus";
-import { syllabusCache } from "~/utils/cache";
 import type { Route } from "./+types/home";
 import { syllabusAppURL } from "./syllabus";
 
@@ -65,21 +64,13 @@ export async function loader({ request }: { request: Request }) {
   const url = new URL(request.url);
   const lang = url.searchParams.get("lang") || "ja";
   const year = url.searchParams.get("year") || "2024";
-  const cacheKey = `${year}-${lang}`;
-
-  // Cache check
-  const cached = syllabusCache.get(cacheKey);
-  if (cached) {
-    return cached;
-  }
-
   try {
     const syllabusUrl = `https://yashikota.github.io/syllabus/${year}-${lang}.json`;
     const res = await fetch(syllabusUrl);
-    if (!res.ok) throw new Error("Failed to fetch");
-    const data = (await res.json()) as Courses;
-    syllabusCache.set(cacheKey, data);
-    return data;
+    if (!res.ok) {
+      throw new Error("Failed to fetch");
+    }
+    return (await res.json()) as Courses;
   } catch (e) {
     console.error("Failed to fetch", e);
     return {};
@@ -87,8 +78,7 @@ export async function loader({ request }: { request: Request }) {
 }
 
 export default function Home() {
-  const initialSyllabuses = useLoaderData() as Courses;
-  const fetcher = useFetcher();
+  const syllabuses = useLoaderData() as Courses;
   const [searchParams] = useSearchParams();
   const lang = searchParams.get("lang") || "ja";
   const query = searchParams.get("q")?.toLowerCase() || "";
@@ -96,18 +86,6 @@ export default function Home() {
   const targets = rawTargets
     ? rawTargets.split(",")
     : ["class_name", "lecturer", "class_code_number"];
-
-  const syllabuses = (fetcher.data as Courses) || initialSyllabuses;
-
-  useEffect(() => {
-    let isMounted = true;
-    if (isMounted && fetcher.state === "idle") {
-      fetcher.load(`/home?lang=${lang}`);
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [lang, fetcher]);
 
   if (!syllabuses || Object.keys(syllabuses).length === 0) {
     return <div className="text-center">Loading...</div>;
