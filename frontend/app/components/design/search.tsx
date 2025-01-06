@@ -1,86 +1,61 @@
 import { SquareCheckBig } from "lucide-react";
-import { useQueryState } from "nuqs";
 import { useMemo } from "react";
 import { useLocation } from "react-router";
 import { MultiSelect } from "~/components/design/multi-select";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 
-const INITIAL_TARGETS = ["class_name", "lecturer", "class_code_number"];
-
-export default function Search() {
+export default function Search(props: {
+  query: string;
+  setQuery: (query: string | null, options?: { history: "replace" }) => void;
+  targets: string | string[];
+  setTargets: (targets: string[]) => void;
+  semester: string[] | null;
+  setSemester: (semester: string[] | null) => void;
+  courseType: string[] | null;
+  setCourseType: (courseType: string[] | null) => void;
+  teacherTraining: string[] | null;
+  setTeacherTraining: (teacherTraining: string[] | null) => void;
+  credits: string[] | null;
+  setCredits: (credits: string[] | null) => void;
+  required: string[] | null;
+  setRequired: (required: string[] | null) => void;
+  style: string[] | null;
+  setStyle: (style: string[] | null) => void;
+  language: string[] | null;
+  setLanguage: (language: string[] | null) => void;
+  scheduling: string[] | null;
+  setScheduling: (scheduling: string[] | null) => void;
+  registration: string[] | null;
+  setRegistration: (registration: string[] | null) => void;
+  INITIAL_TARGETS: string[];
+}) {
+  const {
+    targets,
+    semester,
+    courseType,
+    teacherTraining,
+    credits,
+    required,
+    style,
+    language,
+    scheduling,
+    registration,
+    query,
+    setQuery,
+    setTargets,
+    setSemester,
+    setCourseType,
+    setTeacherTraining,
+    setCredits,
+    setRequired,
+    setStyle,
+    setLanguage,
+    setScheduling,
+    setRegistration,
+    INITIAL_TARGETS,
+  } = props;
   const lang = new URLSearchParams(useLocation().search).get("lang") || "ja";
-
-  const [query, setQuery] = useQueryState("q", {
-    defaultValue: "",
-    shallow: false,
-  });
-  const [targets, setTargets] = useQueryState<string[]>("targets", {
-    defaultValue: INITIAL_TARGETS,
-    parse: (value) => value.split(","),
-    serialize: (value) => value.join(","),
-    shallow: false,
-  });
-  const [semester, setSemester] = useQueryState<string[]>("semester", {
-    defaultValue: [],
-    parse: (value) => value.split(",").filter(Boolean),
-    serialize: (value) => value.join(","),
-    shallow: false,
-  });
-  const [courseType, setCourseType] = useQueryState<string[]>("courseType", {
-    defaultValue: [],
-    parse: (value) => value.split(",").filter(Boolean),
-    serialize: (value) => value.join(","),
-    shallow: false,
-  });
-  const [teacherTraining, setTeacherTraining] = useQueryState<string[]>(
-    "teacherTraining",
-    {
-      defaultValue: [],
-      parse: (value) => value.split(",").filter(Boolean),
-      serialize: (value) => value.join(","),
-      shallow: false,
-    },
-  );
-  const [credits, setCredits] = useQueryState<string[]>("credits", {
-    defaultValue: [],
-    parse: (value) => value.split(",").filter(Boolean),
-    serialize: (value) => value.join(","),
-    shallow: false,
-  });
-  const [required, setRequired] = useQueryState<string[]>("required", {
-    defaultValue: [],
-    parse: (value) => value.split(",").filter(Boolean),
-    serialize: (value) => value.join(","),
-    shallow: false,
-  });
-  const [style, setStyle] = useQueryState<string[]>("style", {
-    defaultValue: [],
-    parse: (value) => value.split(",").filter(Boolean),
-    serialize: (value) => value.join(","),
-    shallow: false,
-  });
-  const [language, setLanguage] = useQueryState<string[]>("language", {
-    defaultValue: [],
-    parse: (value) => value.split(",").filter(Boolean),
-    serialize: (value) => value.join(","),
-    shallow: false,
-  });
-  const [scheduling, setScheduling] = useQueryState<string[]>("scheduling", {
-    defaultValue: [],
-    parse: (value) => value.split(",").filter(Boolean),
-    serialize: (value) => value.join(","),
-    shallow: false,
-  });
-  const [registration, setRegistration] = useQueryState<string[]>(
-    "registration",
-    {
-      defaultValue: [],
-      parse: (value) => value.split(",").filter(Boolean),
-      serialize: (value) => value.join(","),
-      shallow: false,
-    },
-  );
 
   const placeholder = useMemo(() => {
     const targetArray = Array.isArray(targets)
@@ -234,6 +209,7 @@ export default function Search() {
     language,
     scheduling,
     registration,
+    INITIAL_TARGETS,
   ]);
 
   return (

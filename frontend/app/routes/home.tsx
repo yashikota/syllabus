@@ -1,6 +1,6 @@
+import { useQueryState } from "nuqs";
 import { useMemo } from "react";
 import { useLoaderData } from "react-router";
-import { useSearchParams } from "react-router";
 import { SyllabusCard } from "~/components/design/card";
 import Search from "~/components/design/search";
 import type { Courses } from "~/types/syllabus";
@@ -79,17 +79,82 @@ export async function loader({ request }: { request: Request }) {
 
 export default function Home() {
   const syllabuses = useLoaderData() as Courses;
-  const [searchParams] = useSearchParams();
-  const lang = searchParams.get("lang") || "ja";
-  const query = searchParams.get("q")?.toLowerCase() || "";
-  const rawTargets = searchParams.get("targets");
-  const targets = rawTargets
-    ? rawTargets.split(",")
-    : ["class_name", "lecturer", "class_code_number"];
-
   if (!syllabuses || Object.keys(syllabuses).length === 0) {
     return <div className="text-center">Loading...</div>;
   }
+
+  const INITIAL_TARGETS = ["class_name", "lecturer", "class_code_number"];
+
+  const [query, setQuery] = useQueryState("q", {
+    defaultValue: "",
+    shallow: false,
+  });
+  const [targets, setTargets] = useQueryState<string[]>("targets", {
+    defaultValue: INITIAL_TARGETS,
+    parse: (value) => value.split(","),
+    serialize: (value) => value.join(","),
+    shallow: false,
+  });
+  const [semester, setSemester] = useQueryState<string[]>("semester", {
+    defaultValue: [],
+    parse: (value) => value.split(",").filter(Boolean),
+    serialize: (value) => value.join(","),
+    shallow: false,
+  });
+  const [courseType, setCourseType] = useQueryState<string[]>("courseType", {
+    defaultValue: [],
+    parse: (value) => value.split(",").filter(Boolean),
+    serialize: (value) => value.join(","),
+    shallow: false,
+  });
+  const [teacherTraining, setTeacherTraining] = useQueryState<string[]>(
+    "teacherTraining",
+    {
+      defaultValue: [],
+      parse: (value) => value.split(",").filter(Boolean),
+      serialize: (value) => value.join(","),
+      shallow: false,
+    },
+  );
+  const [credits, setCredits] = useQueryState<string[]>("credits", {
+    defaultValue: [],
+    parse: (value) => value.split(",").filter(Boolean),
+    serialize: (value) => value.join(","),
+    shallow: false,
+  });
+  const [required, setRequired] = useQueryState<string[]>("required", {
+    defaultValue: [],
+    parse: (value) => value.split(",").filter(Boolean),
+    serialize: (value) => value.join(","),
+    shallow: false,
+  });
+  const [style, setStyle] = useQueryState<string[]>("style", {
+    defaultValue: [],
+    parse: (value) => value.split(",").filter(Boolean),
+    serialize: (value) => value.join(","),
+    shallow: false,
+  });
+  const [language, setLanguage] = useQueryState<string[]>("language", {
+    defaultValue: [],
+    parse: (value) => value.split(",").filter(Boolean),
+    serialize: (value) => value.join(","),
+    shallow: false,
+  });
+  const [scheduling, setScheduling] = useQueryState<string[]>("scheduling", {
+    defaultValue: [],
+    parse: (value) => value.split(",").filter(Boolean),
+    serialize: (value) => value.join(","),
+    shallow: false,
+  });
+  const [registration, setRegistration] = useQueryState<string[]>(
+    "registration",
+    {
+      defaultValue: [],
+      parse: (value) => value.split(",").filter(Boolean),
+      serialize: (value) => value.join(","),
+      shallow: false,
+    },
+  );
 
   const filteredSyllabuses = useMemo(() => {
     return Object.entries(syllabuses).filter(([_, course]) => {
@@ -121,7 +186,31 @@ export default function Home() {
 
   return (
     <main className="m-4">
-      <Search />
+      <Search
+        query={query}
+        setQuery={setQuery}
+        targets={targets}
+        setTargets={setTargets}
+        semester={semester}
+        setSemester={setSemester}
+        courseType={courseType}
+        setCourseType={setCourseType}
+        teacherTraining={teacherTraining}
+        setTeacherTraining={setTeacherTraining}
+        credits={credits}
+        setCredits={setCredits}
+        required={required}
+        setRequired={setRequired}
+        style={style}
+        setStyle={setStyle}
+        language={language}
+        setLanguage={setLanguage}
+        scheduling={scheduling}
+        setScheduling={setScheduling}
+        registration={registration}
+        setRegistration={setRegistration}
+        INITIAL_TARGETS={INITIAL_TARGETS}
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {filteredSyllabuses.map(([key, course]) => (
           <SyllabusCard key={key} course={course} />
