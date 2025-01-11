@@ -457,11 +457,11 @@ export default function Search(props: {
           className="bg-emerald-500 hover:bg-emerald-700"
           onClick={async () => {
             if (navigator.share) {
-              await navigator.share({
+                await navigator.share({
                 title: document.title,
                 text: "NAIST Syllabus App",
-                url: syllabusAppURL + window.location.pathname,
-              });
+                url: syllabusAppURL + window.location.pathname + window.location.search,
+                });
             } else {
               const msg =
                 lang === "ja"
