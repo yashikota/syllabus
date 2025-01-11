@@ -138,7 +138,10 @@ export default function Syllabus({ params }: Route.LoaderArgs) {
                 await navigator.share({
                   title: document.title,
                   text: "NAIST Syllabus App",
-                  url: syllabusAppURL + window.location.pathname + window.location.search,
+                  url:
+                    syllabusAppURL +
+                    window.location.pathname +
+                    window.location.search,
                 });
               } else {
                 const msg =
