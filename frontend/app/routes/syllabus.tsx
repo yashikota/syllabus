@@ -72,7 +72,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
 export async function loader({ request }: { request: Request }) {
   const url = new URL(request.url);
   const lang = url.searchParams.get("lang") || "ja";
-  const year = url.searchParams.get("year") || "2024";
+  const year = url.searchParams.get("year") || "2025";
   try {
     const url = `https://yashikota.github.io/syllabus/${year}-${lang}.json`;
     const res = await fetch(url);
