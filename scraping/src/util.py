@@ -14,6 +14,11 @@ def output_json(data: dict, filename: str):
         json.dump(data, f, ensure_ascii=False, indent=4)
 
 
+def output_current_year(year: int):
+    with open("data/year.json", "w") as f:
+        json.dump({"current_year": year}, f, ensure_ascii=False, indent=4)
+
+
 def resolve_lut(name: str) -> str:
     return REVERSE_LUT.get(name)
 
