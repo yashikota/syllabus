@@ -85,7 +85,6 @@ function generateICS(syllabus: any[], year: string): Promise<string> {
           status: "CONFIRMED",
           transp: "OPAQUE",
           uid: Math.random().toString(36).substring(6),
-          timezone: "Asia/Tokyo",
         };
       });
     });
