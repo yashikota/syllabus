@@ -39,19 +39,44 @@ function parseDateTime(
       throw new Error(`Invalid period: ${period}`);
     }
 
+    const adjustHours = (hours: number): [number, number] => {
+      let adjustedHours = hours - 9;
+      if (adjustedHours < 0) {
+        return [adjustedHours + 24, -1];
+      }
+      return [adjustedHours, 0];
+    };
+
+    const [startHoursUTC, startDayDiff] = adjustHours(periodTime.start[0]);
+    const [endHoursUTC, endDayDiff] = adjustHours(periodTime.end[0]);
+
+    const startDate = new Date(
+      Number.parseInt(year),
+      Number.parseInt(month) - 1,
+      Number.parseInt(day)
+    );
+    const endDate = new Date(
+      Number.parseInt(year),
+      Number.parseInt(month) - 1,
+      Number.parseInt(day)
+    );
+
+    startDate.setDate(startDate.getDate() + startDayDiff);
+    endDate.setDate(endDate.getDate() + endDayDiff);
+
     return {
       start: [
-        Number.parseInt(year),
-        Number.parseInt(month),
-        Number.parseInt(day),
-        periodTime.start[0],
+        startDate.getFullYear(),
+        startDate.getMonth() + 1,
+        startDate.getDate(),
+        startHoursUTC,
         periodTime.start[1],
       ] as DateArray,
       end: [
-        Number.parseInt(year),
-        Number.parseInt(month),
-        Number.parseInt(day),
-        periodTime.end[0],
+        endDate.getFullYear(),
+        endDate.getMonth() + 1,
+        endDate.getDate(),
+        endHoursUTC,
         periodTime.end[1],
       ] as DateArray,
     };
