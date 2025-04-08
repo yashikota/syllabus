@@ -119,14 +119,18 @@ function linkify(text: string | string[] | null) {
   return processText;
 }
 
-export default function Syllabus({ params }: Route.LoaderArgs) {
+export default async function Syllabus({ params }: Route.LoaderArgs) {
   const syllabuses = useLoaderData() as Courses;
   if (!syllabuses || Object.keys(syllabuses).length === 0) {
     return <div className="text-center">Loading...</div>;
   }
   const syllabus = syllabuses[params.syllabusID];
   const lang = new URLSearchParams(useLocation().search).get("lang") || "ja";
-  const year = new URLSearchParams(useLocation().search).get("year") || "2024";
+  const yearResponse = await fetch(
+    "https://yashikota.github.io/syllabus/year.json",
+  );
+  const yearData = await yearResponse.json();
+  const year = new URLSearchParams(useLocation().search).get("year") || yearData.current_year;
 
   return (
     <main className="mx-auto w-full max-w-screen-lg pb-4 px-4 whitespace-pre-wrap">
