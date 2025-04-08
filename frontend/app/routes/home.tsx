@@ -69,7 +69,7 @@ export async function loader({ request }: { request: Request }) {
   );
   const yearData = await yearResponse.json();
   const year = url.searchParams.get("year") || yearData.current_year;
-  
+
   try {
     const syllabusUrl = `https://yashikota.github.io/syllabus/${year}-${lang}.json`;
     const res = await fetch(syllabusUrl);

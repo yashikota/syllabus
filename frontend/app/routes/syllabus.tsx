@@ -15,7 +15,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
 
   return [
     {
-      title: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
+      title: `${data?.data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
     },
     {
       name: "description",
@@ -40,7 +40,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
     },
     {
       property: "og:title",
-      content: `${data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
+      content: `${data?.data?.[syllabusParams.syllabusID]?.basic_course_information.class_name} | NAIST Syllabus App`,
     },
     {
       property: "og:description",
@@ -85,10 +85,11 @@ export async function loader({ request }: { request: Request }) {
     if (!res.ok) {
       throw new Error("Failed to fetch");
     }
-    return (await res.json()) as Courses;
+    const data = (await res.json()) as Courses;
+    return { data, currentYear: year };
   } catch (e) {
     console.error("Failed to fetch", e);
-    return {};
+    return { data: {}, currentYear: year };
   }
 }
 
@@ -119,18 +120,18 @@ function linkify(text: string | string[] | null) {
   return processText;
 }
 
-export default async function Syllabus({ params }: Route.LoaderArgs) {
-  const syllabuses = useLoaderData() as Courses;
+export default function Syllabus({ params }: Route.LoaderArgs) {
+  const { data: syllabuses, currentYear } = useLoaderData() as {
+    data: Courses;
+    currentYear: string;
+  };
   if (!syllabuses || Object.keys(syllabuses).length === 0) {
     return <div className="text-center">Loading...</div>;
   }
   const syllabus = syllabuses[params.syllabusID];
   const lang = new URLSearchParams(useLocation().search).get("lang") || "ja";
-  const yearResponse = await fetch(
-    "https://yashikota.github.io/syllabus/year.json",
-  );
-  const yearData = await yearResponse.json();
-  const year = new URLSearchParams(useLocation().search).get("year") || yearData.current_year;
+  const year =
+    new URLSearchParams(useLocation().search).get("year") || currentYear;
 
   return (
     <main className="mx-auto w-full max-w-screen-lg pb-4 px-4 whitespace-pre-wrap">
