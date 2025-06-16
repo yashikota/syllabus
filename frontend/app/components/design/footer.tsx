@@ -6,16 +6,6 @@ export default function Footer() {
     <footer className="flex flex-col bg-naist text-white p-4 justify-center items-center">
       <div className="flex flex-col mb-2 justify-center">
         <Link
-          to="https://naist.yashikota.com"
-          className="mr-4 text-black m-1"
-          target="_blank"
-        >
-          <div className="flex items-center">
-            <House className="mr-1" />
-            NAIST Apps
-          </div>
-        </Link>
-        <Link
           to="https://edu-portal.naist.jp/uprx/up/pk/pky001/Pky00101.xhtml?guestlogin=Kmh006"
           className="mr-4 text-black m-1"
           target="_blank"
